@@ -2,14 +2,18 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'node:path';
 
 // https://vite.dev/config/
-export default defineConfig({
+// `mode === 'https-dev'` (npm run dev:https) → activate self-signed cert
+// pour tester sur le réseau local en HTTPS (Web Crypto exige un contexte sécurisé).
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     tailwindcss(),
+    mode === 'https-dev' && basicSsl(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/logo-mark.svg'],
@@ -121,4 +125,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

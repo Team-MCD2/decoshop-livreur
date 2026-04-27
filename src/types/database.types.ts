@@ -224,6 +224,71 @@ export interface Database {
         Args: { p_client_id: string };
         Returns: void;
       };
+      request_signature: {
+        Args: { p_bl_id: string; p_ttl_minutes?: number };
+        Returns: {
+          token: string;
+          bl_id: string;
+          url_path: string;
+          date_emission: string;
+          date_expiration: string;
+          ttl_minutes: number;
+          email_client: string | null;
+        };
+      };
+      submit_signature: {
+        Args: {
+          p_token: string;
+          p_signature_data: string;
+          p_signe_par_parent?: boolean;
+          p_parent_nom?: string | null;
+          p_parent_lien?: string | null;
+          p_user_agent?: string | null;
+        };
+        Returns: {
+          success: boolean;
+          bl_id: string;
+          numero_bl: string;
+          signed_at: string;
+        };
+      };
+      get_signature_public: {
+        Args: { p_token: string };
+        Returns: {
+          status: 'en_attente' | 'signe' | 'expire';
+          is_expired: boolean;
+          is_signed: boolean;
+          date_emission: string;
+          date_expiration: string;
+          date_signature: string | null;
+          numero_bl: string;
+          montant_total_ttc: number;
+          mode_livraison: 'domicile' | 'retrait_magasin';
+          creneau: 'matin' | 'apres_midi' | 'soir' | null;
+          date_livraison_prevue: string | null;
+          client_nom: string;
+          client_prenom: string | null;
+          client_ville: string | null;
+          articles_count: number;
+        };
+      };
+      expire_pending_signatures: {
+        Args: Record<string, never>;
+        Returns: {
+          processed: number;
+          expired_at: string;
+        };
+      };
+      invalidate_signature: {
+        Args: { p_bl_id: string; p_motif?: string | null };
+        Returns: {
+          success: boolean;
+          bl_id: string;
+          motif: string | null;
+          invalidated_at: string;
+          invalidated_by: string;
+        };
+      };
     };
   };
 }

@@ -26,6 +26,34 @@ const SALT_BYTES = 16;
 const PBKDF2_ITERATIONS = 100_000;
 const HASH_BITS = 256;
 
+/**
+ * Erreur levée quand `crypto.subtle` est indisponible (contexte non sécurisé).
+ * Web Crypto requiert HTTPS ou un hôte local (`localhost` / `127.0.0.1`).
+ * Sur un IP privé en HTTP (ex. 192.168.x.x:5173), `crypto.subtle` est `undefined`.
+ */
+export class InsecureContextError extends Error {
+  constructor() {
+    super('INSECURE_CONTEXT');
+    this.name = 'InsecureContextError';
+  }
+}
+
+/**
+ * Vrai si `crypto.subtle` est utilisable (HTTPS ou origin local).
+ * Utiliser pour gate-keeper l'UI avant d'appeler setupPin/verifyPin.
+ */
+export function isCryptoAvailable(): boolean {
+  return (
+    typeof globalThis !== 'undefined' &&
+    typeof globalThis.crypto !== 'undefined' &&
+    typeof globalThis.crypto.subtle !== 'undefined'
+  );
+}
+
+function assertCryptoAvailable(): void {
+  if (!isCryptoAvailable()) throw new InsecureContextError();
+}
+
 function bytesToHex(buf: ArrayBuffer): string {
   return Array.from(new Uint8Array(buf))
     .map((b) => b.toString(16).padStart(2, '0'))
@@ -88,6 +116,7 @@ export async function setupPin(
   if (!isValidPin(pin)) {
     throw new Error('PIN invalide : doit contenir 4 à 6 chiffres');
   }
+  assertCryptoAvailable();
 
   const salt = crypto.getRandomValues(new Uint8Array(SALT_BYTES));
   const hash = await hashPinWithSalt(pin, salt);
@@ -110,6 +139,7 @@ export async function verifyPin(pin: string): Promise<boolean> {
   const storedSalt = localStorage.getItem(STORAGE_KEY_SALT);
 
   if (!storedHash || !storedSalt) return false;
+  assertCryptoAvailable();
 
   const salt = hexToBytes(storedSalt);
   const computedHash = await hashPinWithSalt(pin, salt);

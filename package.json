@@ -6,6 +6,8 @@
   "description": "PWA livreur DecoShop Toulouse — gestion des bons de livraison",
   "scripts": {
     "dev": "vite",
+    "dev:host": "vite --host",
+    "dev:https": "vite --host --mode https-dev",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -43,6 +45,7 @@
     "@types/node": "^22.9.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-react": "^4.3.0",
     "@vitest/ui": "^2.1.0",
     "eslint": "^9.15.0",

@@ -8,6 +8,9 @@ const Login = lazy(() => import('./auth/Login'));
 const SetupPin = lazy(() => import('./auth/SetupPin'));
 const Unlock = lazy(() => import('./auth/Unlock'));
 
+// Public pages (anon, hors AuthGuard)
+const Sign = lazy(() => import('./public/Sign'));
+
 // Protected pages
 const Home = lazy(() => import('./protected/Home'));
 const BLDetail = lazy(() => import('./protected/BLDetail'));
@@ -34,6 +37,7 @@ export function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/setup-pin" element={<SetupPin />} />
         <Route path="/unlock" element={<Unlock />} />
+        <Route path="/sign/:token" element={<Sign />} />
 
         {/* Routes protégées avec layout */}
         <Route

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,6 +10,9 @@ import {
   AlertCircle,
   Wifi,
   WifiOff,
+  PenLine,
+  CheckCircle2,
+  RefreshCw,
 } from 'lucide-react';
 import { Card, CardTitle, CardSubtitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -18,6 +21,8 @@ import { CreneauChip } from '@/components/bl/CreneauChip';
 import { BLStatusTimeline } from '@/components/bl/BLStatusTimeline';
 import { ContactBar } from '@/components/bl/ContactBar';
 import { WorkflowActions } from '@/components/bl/WorkflowActions';
+import { SignatureModal } from '@/components/bl/SignatureModal';
+import { CountdownPill } from '@/components/bl/CountdownPill';
 import { useBLDetail } from '@/hooks/useBLDetail';
 import { useGPSTracking } from '@/hooks/useGPSTracking';
 import { useProfile } from '@/hooks/useAuth';
@@ -43,6 +48,8 @@ export default function BLDetail() {
   const profile = useProfile();
   const { data: bl, isLoading, error } = useBLDetail(id);
   useBLsRealtime(profile?.id);
+
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
 
   // GPS tracking actif uniquement quand BL en route (RGPD §12)
   const isEnRoute = bl?.statut === 'en_route';
@@ -266,8 +273,90 @@ export default function BLDetail() {
         )}
       </Card>
 
-      {/* Workflow actions */}
-      <WorkflowActions blId={bl.id} status={bl.statut} />
+      {/* Workflow actions / Signature
+          - livre / signature_attendue / signature_expiree → carte signature avec CTA modal
+          - signe                                          → carte récap signature (terminal)
+          - autres                                         → bouton workflow standard */}
+      {bl.statut === 'signe' ? (
+        <Card padding="md">
+          <CardTitle>
+            <span className="inline-flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-green-700" />
+              {t('signature.signed_ok')}
+            </span>
+          </CardTitle>
+          {bl.signature?.date_signature && (
+            <p className="mt-2 text-sm text-muted">
+              {t('signature.signed_at', {
+                date: new Date(bl.signature.date_signature).toLocaleString(dateLocale),
+              })}
+            </p>
+          )}
+        </Card>
+      ) : bl.statut === 'livre' ||
+        bl.statut === 'signature_attendue' ||
+        bl.statut === 'signature_expiree' ? (
+        <Card padding="md">
+          <CardTitle>
+            <span className="inline-flex items-center gap-2">
+              <PenLine className="w-5 h-5 text-navy" />
+              {t('signature.modal_title')}
+            </span>
+          </CardTitle>
+
+          {/* Pill compte-à-rebours si lien actif (statut signature_attendue) */}
+          {bl.statut === 'signature_attendue' && bl.signature?.date_expiration && (
+            <div className="mt-3">
+              <CountdownPill expiresAt={bl.signature.date_expiration} />
+            </div>
+          )}
+
+          {/* Bandeau si lien expiré */}
+          {bl.statut === 'signature_expiree' && (
+            <div className="mt-3 rounded-xl bg-yellow-100 border border-yellow-300 px-3 py-2 text-sm text-ink">
+              {t('signature.expired_hint')}
+            </div>
+          )}
+
+          <Button
+            intent={bl.statut === 'signature_expiree' ? 'yellow' : 'primary'}
+            size="lg"
+            fullWidth
+            leftIcon={
+              bl.statut === 'signature_expiree' ? (
+                <RefreshCw className="w-5 h-5 rtl-flip" />
+              ) : (
+                <PenLine className="w-5 h-5 rtl-flip" />
+              )
+            }
+            onClick={() => setShowSignatureModal(true)}
+            className="mt-3"
+          >
+            {bl.statut === 'signature_attendue'
+              ? t('signature.method_canvas')
+              : bl.statut === 'signature_expiree'
+                ? t('signature.request_again')
+                : t('signature.request')}
+          </Button>
+        </Card>
+      ) : (
+        <WorkflowActions blId={bl.id} status={bl.statut} />
+      )}
+
+      <SignatureModal
+        open={showSignatureModal}
+        onClose={() => setShowSignatureModal(false)}
+        blId={bl.id}
+        numeroBl={bl.numero_bl}
+        existingToken={
+          bl.statut === 'signature_attendue' ? (bl.signature?.token ?? null) : null
+        }
+        existingExpiration={
+          bl.statut === 'signature_attendue'
+            ? (bl.signature?.date_expiration ?? null)
+            : null
+        }
+      />
     </div>
   );
 }

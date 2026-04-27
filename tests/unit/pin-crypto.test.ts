@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import {
   isValidPin,
   setupPin,
@@ -6,6 +6,8 @@ import {
   hasPinSetup,
   clearPin,
   getPinUserId,
+  isCryptoAvailable,
+  InsecureContextError,
 } from '@/lib/pin-crypto';
 
 const TEST_USER_ID = 'test-user-uuid-123';
@@ -83,6 +85,67 @@ describe('pin-crypto', () => {
 
     it('throw si on essaie de setup avec un PIN invalide', async () => {
       await expect(setupPin('abc', TEST_USER_ID)).rejects.toThrow();
+    });
+  });
+
+  describe('isCryptoAvailable / InsecureContextError', () => {
+    const originalSubtle = globalThis.crypto?.subtle;
+
+    afterEach(() => {
+      // Restore subtle dans tous les cas
+      if (globalThis.crypto && originalSubtle) {
+        Object.defineProperty(globalThis.crypto, 'subtle', {
+          value: originalSubtle,
+          configurable: true,
+          writable: false,
+        });
+      }
+    });
+
+    it('renvoie true en contexte sécurisé (jsdom)', () => {
+      expect(isCryptoAvailable()).toBe(true);
+    });
+
+    it('renvoie false si crypto.subtle est indisponible (HTTP non-localhost)', () => {
+      Object.defineProperty(globalThis.crypto, 'subtle', {
+        value: undefined,
+        configurable: true,
+        writable: false,
+      });
+      expect(isCryptoAvailable()).toBe(false);
+    });
+
+    it('setupPin throw InsecureContextError si crypto.subtle indisponible', async () => {
+      Object.defineProperty(globalThis.crypto, 'subtle', {
+        value: undefined,
+        configurable: true,
+        writable: false,
+      });
+      await expect(setupPin('1234', TEST_USER_ID)).rejects.toBeInstanceOf(
+        InsecureContextError,
+      );
+    });
+
+    it('verifyPin throw InsecureContextError si PIN existant + crypto indisponible', async () => {
+      // 1. Setup en contexte sécurisé
+      await setupPin('1234', TEST_USER_ID);
+      // 2. Désactive subtle (simule HTTP non-localhost)
+      Object.defineProperty(globalThis.crypto, 'subtle', {
+        value: undefined,
+        configurable: true,
+        writable: false,
+      });
+      await expect(verifyPin('1234')).rejects.toBeInstanceOf(InsecureContextError);
+    });
+
+    it('verifyPin renvoie false (sans throw) si pas de PIN stocké, même sans crypto', async () => {
+      // Pas de PIN stocké → court-circuit avant l'assertion crypto
+      Object.defineProperty(globalThis.crypto, 'subtle', {
+        value: undefined,
+        configurable: true,
+        writable: false,
+      });
+      await expect(verifyPin('1234')).resolves.toBe(false);
     });
   });
 });

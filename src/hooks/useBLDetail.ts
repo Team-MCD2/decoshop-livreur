@@ -2,6 +2,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import type { BL, Client, LigneBL, Commande, BLStatus } from '@/types/domain';
 
+/** Champs minimaux de la signature pour l'UI BLDetail (sans dévoiler signature_data côté client). */
+export interface BLSignatureSummary {
+  id: string;
+  token: string;
+  statut: 'en_attente' | 'signe' | 'expire';
+  date_emission: string;
+  date_expiration: string;
+  date_signature: string | null;
+  retry_count: number;
+}
+
 /**
  * BL avec toutes les relations nécessaires pour la page Detail.
  */
@@ -9,13 +20,17 @@ export interface BLDetail extends BL {
   client: Client | null;
   commande: Pick<Commande, 'id' | 'numero_commande' | 'date_commande' | 'montant_total_ttc'> | null;
   lignes: LigneBL[];
+  signature: BLSignatureSummary | null;
 }
 
 const SELECT_DETAIL = `
   *,
   client:clients (*),
   commande:commandes ( id, numero_commande, date_commande, montant_total_ttc ),
-  lignes:lignes_bl ( * )
+  lignes:lignes_bl ( * ),
+  signature:signatures_electroniques (
+    id, token, statut, date_emission, date_expiration, date_signature, retry_count
+  )
 ` as const;
 
 /**
