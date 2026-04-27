@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import { clearPin } from '@/lib/pin-crypto';
+import { clearPin, getPinUserId } from '@/lib/pin-crypto';
 import type { Profile } from '@/types/domain';
 
 interface AuthState {
@@ -66,6 +66,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       throw error;
     }
     if (data.session) {
+      // Si un PIN existe sur ce device pour un AUTRE utilisateur (device partagé),
+      // on l'efface — le nouvel utilisateur devra créer le sien.
+      const existingPinUser = getPinUserId();
+      if (existingPinUser && existingPinUser !== data.user.id) {
+        clearPin();
+      }
       set({ session: data.session, user: data.user, isUnlocked: true });
       await get().loadProfile();
     }
@@ -73,7 +79,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     await supabase.auth.signOut();
-    clearPin();
+    // PIN conservé volontairement (device-bound, commodité de ré-enrôlement).
+    // Voir signInWithPassword : wipe automatique si autre utilisateur se connecte.
     set({ session: null, user: null, profile: null, isUnlocked: false });
   },
 

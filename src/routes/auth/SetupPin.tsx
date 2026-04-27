@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Shield } from 'lucide-react';
+import { Shield, ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { PinPad } from '@/components/auth/PinPad';
@@ -47,10 +47,10 @@ export default function SetupPin() {
     }
   };
 
-  const handleSkip = () => {
-    setUnlocked(true);
-    const next = (location.state as { from?: string } | null)?.from ?? '/';
-    navigate(next, { replace: true });
+  const handleBack = () => {
+    setStep('enter');
+    setFirstPin('');
+    setError(null);
   };
 
   return (
@@ -76,11 +76,18 @@ export default function SetupPin() {
 
         <p className="text-xs text-muted mt-6">{t('auth.pin.length_hint')}</p>
 
-        <div className="mt-6 pt-6 border-t border-line">
-          <Button intent="ghost" size="sm" onClick={handleSkip}>
-            {t('auth.pin.skip')}
-          </Button>
-        </div>
+        {step === 'confirm' && (
+          <div className="mt-6 pt-6 border-t border-line">
+            <Button
+              intent="ghost"
+              size="sm"
+              leftIcon={<ArrowLeft className="w-4 h-4 rtl-flip" />}
+              onClick={handleBack}
+            >
+              {t('common.back')}
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   );

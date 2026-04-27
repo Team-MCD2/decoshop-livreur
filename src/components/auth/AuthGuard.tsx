@@ -9,10 +9,10 @@ interface AuthGuardProps {
 
 /**
  * Garde de route :
- *   - Pas de session → /login
- *   - Session OK mais pas unlocked ET PIN configuré → /unlock
- *   - Session OK mais pas unlocked ET pas de PIN → /login (auto-redirect après /login)
- *   - Session OK + unlocked → render children
+ *   - Pas de session             → /login
+ *   - Session + PIN configuré + locked → /unlock
+ *   - Session + pas de PIN              → /setup-pin (PIN obligatoire, spec §6.4)
+ *   - Session + unlocked                → render children
  */
 export function AuthGuard({ children }: AuthGuardProps) {
   const session = useAuthStore((s) => s.session);
@@ -33,11 +33,11 @@ export function AuthGuard({ children }: AuthGuardProps) {
   }
 
   if (!isUnlocked) {
+    // PIN obligatoire (spec §6.4 sécurité)
     if (hasPinSetup()) {
       return <Navigate to="/unlock" state={{ from: location.pathname }} replace />;
     }
-    // Pas de PIN configuré : on considère la session fraîche comme déverrouillée
-    useAuthStore.getState().setUnlocked(true);
+    return <Navigate to="/setup-pin" state={{ from: location.pathname }} replace />;
   }
 
   return <>{children}</>;

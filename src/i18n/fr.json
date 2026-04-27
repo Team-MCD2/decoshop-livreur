@@ -51,8 +51,7 @@
       "length_hint": "4 à 6 chiffres",
       "mismatch": "Les codes ne correspondent pas. Recommence.",
       "incorrect": "Code incorrect",
-      "use_password": "Utiliser mot de passe à la place",
-      "skip": "Passer (saisir mot de passe à chaque fois)"
+      "use_password": "Utiliser mot de passe à la place"
     }
   },
   "nav": {

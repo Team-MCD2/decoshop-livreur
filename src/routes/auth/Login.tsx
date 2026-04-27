@@ -22,9 +22,9 @@ export default function Login() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Si déjà connecté → home (ou unlock si PIN)
+  // Si déjà connecté → unlock (PIN existant) ou setup-pin (premier passage)
   if (session && !submitting) {
-    return <Navigate to={hasPinSetup() ? '/unlock' : '/'} replace />;
+    return <Navigate to={hasPinSetup() ? '/unlock' : '/setup-pin'} replace />;
   }
 
   const onSubmit = async (e: FormEvent) => {
