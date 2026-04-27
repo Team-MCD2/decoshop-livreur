@@ -108,8 +108,69 @@
       "release_pending": "تم إرسال الطلب",
       "release_sent": "تم إرسال الطلب إلى البائع",
       "release_failed": "فشل الطلب",
-      "open_map": "المسار"
+      "open_map": "المسار",
+      "call_client": "اتصال",
+      "sms_client": "رسالة",
+      "back": "رجوع"
+    },
+    "detail": {
+      "client": "العميل",
+      "address": "العنوان",
+      "address_complement": "تفاصيل الوصول",
+      "floor": "الطابق",
+      "elevator": "المصعد",
+      "elevator_yes": "نعم",
+      "elevator_no": "لا",
+      "door_code": "رمز الباب",
+      "phone": "الهاتف",
+      "articles": "العناصر",
+      "fragile": "قابل للكسر",
+      "no_articles": "لا توجد عناصر",
+      "creneau": "الفترة",
+      "amount": "المبلغ",
+      "order": "الطلب",
+      "attempts": "محاولات",
+      "redelivery_fee": "رسوم إعادة التوصيل",
+      "open_in_maps": "فتح في الخرائط",
+      "loading": "جارٍ تحميل أمر التوصيل…",
+      "not_found": "أمر التوصيل غير موجود",
+      "back_home": "العودة إلى الرئيسية"
+    },
+    "timeline": {
+      "title": "التتبّع",
+      "step_assigne": "مُسنَد",
+      "step_confirme": "مؤكَّد",
+      "step_en_route": "في الطريق",
+      "step_livre": "مُسلَّم",
+      "step_signe": "موقَّع"
+    },
+    "workflow": {
+      "title": "الإجراءات",
+      "start_delivery": "ابدأ التوصيل",
+      "starting": "جارٍ البدء…",
+      "arrived": "وصلت",
+      "mark_delivered": "تأكيد التسليم",
+      "delivering": "جارٍ التحديث…",
+      "request_signature": "طلب التوقيع",
+      "report_failure": "الإبلاغ عن فشل",
+      "blocked": "الإجراء غير متاح لهذه الحالة",
+      "confirmation_required": "أكد الإجراء — لا يمكن التراجع عنه.",
+      "confirm": "نعم، تأكيد"
+    },
+    "gps": {
+      "starting": "تشغيل GPS…",
+      "active": "GPS نشط",
+      "denied": "تم رفض تحديد الموقع",
+      "denied_hint": "اسمح بتحديد الموقع في إعدادات المتصفح لتفعيل التتبع.",
+      "unavailable": "GPS غير متاح",
+      "accuracy": "الدقة: {{m}} م"
     }
+  },
+  "map": {
+    "missing_token": "Mapbox غير مُهيأ",
+    "missing_token_hint": "حدّد VITE_MAPBOX_TOKEN في .env.local لتفعيل الخريطة.",
+    "no_coords": "إحداثيات GPS غير محددة لهذا العميل",
+    "loading": "جارٍ تحميل الخريطة…"
   },
   "creneau": {
     "matin": "صباحًا",

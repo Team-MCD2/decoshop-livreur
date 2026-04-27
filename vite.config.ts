@@ -48,6 +48,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Mapbox (~1,8 MB) exclu du précache — chargé à la demande puis caché en runtime.
+        // Évite +488 KiB gzip à chaque install/update.
+        globIgnores: ['**/mapbox-*.js', '**/mapbox-gl*.css'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
@@ -64,6 +67,24 @@ export default defineConfig({
               cacheName: 'supabase-api',
               networkTimeoutSeconds: 10,
               expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 },
+            },
+          },
+          {
+            // Mapbox JS chunk : cache-first (immutable hash) après 1ère visite BL detail
+            urlPattern: /\/assets\/mapbox-[^/]+\.(js|css)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'mapbox-chunk',
+              expiration: { maxEntries: 4, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
+            // Tuiles Mapbox API (style + tiles)
+            urlPattern: /^https:\/\/api\.mapbox\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'mapbox-api',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 7 },
             },
           },
         ],
@@ -93,6 +114,9 @@ export default defineConfig({
           supabase: ['@supabase/supabase-js'],
           query: ['@tanstack/react-query'],
           i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          // Mapbox isolé : chunk dédié, lazy-loadé via React.lazy(BLMap),
+          // évite les 1,8 MB sur la première page qui n'utilise pas la map.
+          mapbox: ['mapbox-gl'],
         },
       },
     },

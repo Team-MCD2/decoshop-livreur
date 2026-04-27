@@ -108,8 +108,69 @@
       "release_pending": "Demande envoyée",
       "release_sent": "Demande envoyée au vendeur",
       "release_failed": "Échec de la demande",
-      "open_map": "Itinéraire"
+      "open_map": "Itinéraire",
+      "call_client": "Appeler",
+      "sms_client": "SMS",
+      "back": "Retour"
+    },
+    "detail": {
+      "client": "Client",
+      "address": "Adresse",
+      "address_complement": "Complément d'accès",
+      "floor": "Étage",
+      "elevator": "Ascenseur",
+      "elevator_yes": "Oui",
+      "elevator_no": "Non",
+      "door_code": "Code porte",
+      "phone": "Téléphone",
+      "articles": "Articles",
+      "fragile": "Fragile",
+      "no_articles": "Aucun article",
+      "creneau": "Créneau",
+      "amount": "Montant",
+      "order": "Commande",
+      "attempts": "Tentatives",
+      "redelivery_fee": "Frais de re-livraison",
+      "open_in_maps": "Ouvrir dans Maps",
+      "loading": "Chargement du BL…",
+      "not_found": "BL introuvable",
+      "back_home": "Retour à l'accueil"
+    },
+    "timeline": {
+      "title": "Suivi",
+      "step_assigne": "Assigné",
+      "step_confirme": "Confirmé",
+      "step_en_route": "En route",
+      "step_livre": "Livré",
+      "step_signe": "Signé"
+    },
+    "workflow": {
+      "title": "Actions",
+      "start_delivery": "Démarrer la livraison",
+      "starting": "Démarrage…",
+      "arrived": "Je suis arrivé",
+      "mark_delivered": "Marquer comme livré",
+      "delivering": "Mise à jour…",
+      "request_signature": "Demander la signature",
+      "report_failure": "Signaler un échec",
+      "blocked": "Action indisponible pour ce statut",
+      "confirmation_required": "Confirme l'action — irréversible.",
+      "confirm": "Oui, confirmer"
+    },
+    "gps": {
+      "starting": "Démarrage GPS…",
+      "active": "GPS actif",
+      "denied": "Géolocalisation refusée",
+      "denied_hint": "Autorise la localisation dans les paramètres du navigateur pour activer le tracking.",
+      "unavailable": "GPS indisponible",
+      "accuracy": "Précision : {{m}} m"
     }
+  },
+  "map": {
+    "missing_token": "Mapbox non configuré",
+    "missing_token_hint": "Définis VITE_MAPBOX_TOKEN dans .env.local pour activer la carte.",
+    "no_coords": "Coordonnées GPS non renseignées pour ce client",
+    "loading": "Chargement de la carte…"
   },
   "creneau": {
     "matin": "Matin",

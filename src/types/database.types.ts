@@ -129,6 +129,57 @@ export interface Database {
         Update: Updatable<Notification>;
         Relationships: [];
       };
+      driver_locations: {
+        Row: {
+          id: string;
+          driver_id: string;
+          bl_id: string | null;
+          lat: number;
+          lng: number;
+          accuracy_m: number | null;
+          heading_deg: number | null;
+          speed_kmh: number | null;
+          recorded_at: string;
+        };
+        Insert: {
+          id?: string;
+          driver_id: string;
+          bl_id?: string | null;
+          lat: number;
+          lng: number;
+          accuracy_m?: number | null;
+          heading_deg?: number | null;
+          speed_kmh?: number | null;
+          recorded_at?: string;
+        };
+        Update: {
+          id?: string;
+          driver_id?: string;
+          bl_id?: string | null;
+          lat?: number;
+          lng?: number;
+          accuracy_m?: number | null;
+          heading_deg?: number | null;
+          speed_kmh?: number | null;
+          recorded_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'driver_locations_driver_id_fkey';
+            columns: ['driver_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'driver_locations_bl_id_fkey';
+            columns: ['bl_id'];
+            isOneToOne: false;
+            referencedRelation: 'bons_livraison';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       v_livreur_bl_today: {

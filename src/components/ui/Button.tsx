@@ -1,8 +1,8 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 import { tv, type VariantProps } from 'tailwind-variants';
 import { cn } from '@/utils/cn';
 
-const buttonStyles = tv({
+export const buttonStyles = tv({
   base: [
     'inline-flex items-center justify-center gap-2',
     'font-semibold tracking-wide',
@@ -73,5 +73,48 @@ export function Button({
       {children}
       {!loading && rightIcon}
     </button>
+  );
+}
+
+export interface ButtonLinkProps
+  extends AnchorHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof buttonStyles> {
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  /** Si true, applique le style disabled (opacity + curseur) sans empêcher le focus. */
+  disabled?: boolean;
+}
+
+/**
+ * Anchor (<a>) stylé comme un Button — pour `tel:`, `sms:`, `mailto:`,
+ * liens externes (`target="_blank"`), ou liens internes via `react-router`.
+ */
+export function ButtonLink({
+  className,
+  intent,
+  size,
+  fullWidth,
+  leftIcon,
+  rightIcon,
+  disabled,
+  children,
+  href,
+  ...props
+}: ButtonLinkProps) {
+  return (
+    <a
+      className={cn(
+        buttonStyles({ intent, size, fullWidth }),
+        disabled && 'pointer-events-none opacity-50',
+        className,
+      )}
+      href={disabled ? undefined : href}
+      aria-disabled={disabled || undefined}
+      {...props}
+    >
+      {leftIcon}
+      {children}
+      {rightIcon}
+    </a>
   );
 }
