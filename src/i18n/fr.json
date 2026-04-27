@@ -1,0 +1,121 @@
+{
+  "app": {
+    "name": "DecoShop Livreur",
+    "tagline": "Livraison · Toulouse"
+  },
+  "common": {
+    "loading": "Chargement…",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "validate": "Valider",
+    "close": "Fermer",
+    "retry": "Réessayer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "yes": "Oui",
+    "no": "Non",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "this_week": "Cette semaine",
+    "language": "Langue",
+    "logout": "Se déconnecter"
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion livreur",
+      "subtitle": "Connecte-toi avec ton compte DecoShop",
+      "email": "Email",
+      "email_placeholder": "ton.email@decoshop-toulouse.fr",
+      "password": "Mot de passe",
+      "password_placeholder": "Ton mot de passe",
+      "submit": "Se connecter",
+      "submitting": "Connexion en cours…",
+      "forgot": "Mot de passe oublié ?",
+      "errors": {
+        "invalid_credentials": "Email ou mot de passe incorrect",
+        "network": "Pas de connexion. Vérifie ton réseau.",
+        "unknown": "Une erreur est survenue. Réessaie.",
+        "not_livreur": "Ce compte n'a pas accès à l'application livreur"
+      }
+    },
+    "pin": {
+      "setup_title": "Crée ton code PIN",
+      "setup_subtitle": "Choisis un code à 4 ou 6 chiffres pour déverrouiller rapidement l'app",
+      "enter_title": "Saisis ton code PIN",
+      "enter_subtitle": "Pour accéder à l'app",
+      "confirm_title": "Confirme ton code",
+      "confirm_subtitle": "Entre-le une 2ème fois",
+      "length_hint": "4 à 6 chiffres",
+      "mismatch": "Les codes ne correspondent pas. Recommence.",
+      "incorrect": "Code incorrect",
+      "use_password": "Utiliser mot de passe à la place",
+      "skip": "Passer (saisir mot de passe à chaque fois)"
+    }
+  },
+  "nav": {
+    "home": "Accueil",
+    "calendar": "Calendrier",
+    "performance": "Stats",
+    "profile": "Profil"
+  },
+  "home": {
+    "greeting_morning": "Bonjour",
+    "greeting_afternoon": "Bon après-midi",
+    "greeting_evening": "Bonsoir",
+    "today_kpi": {
+      "title": "Aujourd'hui",
+      "delivered": "{{count}} livré",
+      "delivered_plural": "{{count}} livrés",
+      "in_progress": "{{count}} en cours",
+      "remaining": "{{count}} restant",
+      "remaining_plural": "{{count}} restants",
+      "signature_rate": "Signature : {{rate}} %"
+    },
+    "to_deliver": "À livrer",
+    "no_deliveries": "Aucune livraison prévue aujourd'hui."
+  },
+  "bl": {
+    "status": {
+      "cree": "Créé",
+      "assigne": "Assigné",
+      "confirme": "Confirmé",
+      "release_demandee": "Demande envoyée",
+      "bloque": "Bloqué",
+      "en_livraison": "En livraison",
+      "en_route": "En route",
+      "livre": "Livré",
+      "signature_attendue": "Signature en attente",
+      "signe": "Signé",
+      "signature_expiree": "Signature expirée",
+      "echec_T1": "Échec (1ère tentative)",
+      "echec_T2": "Échec (2ème tentative)",
+      "abandon": "Abandonné"
+    }
+  },
+  "creneau": {
+    "matin": "Matin",
+    "matin_hours": "9h-12h",
+    "apres_midi": "Après-midi",
+    "apres_midi_hours": "14h-18h",
+    "soir": "Soir",
+    "soir_hours": "18h-20h"
+  },
+  "profile": {
+    "title": "Profil",
+    "settings": "Paramètres",
+    "language": "Langue",
+    "theme": "Thème",
+    "vehicle": "Véhicule",
+    "logout": "Se déconnecter",
+    "logout_confirm": "Tu es sûr de vouloir te déconnecter ?"
+  },
+  "errors": {
+    "page_not_found": "Page introuvable",
+    "page_not_found_back": "Retourner à l'accueil",
+    "offline": "Tu es hors ligne. Certaines actions seront différées.",
+    "generic": "Une erreur est survenue."
+  }
+}

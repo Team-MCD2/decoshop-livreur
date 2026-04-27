@@ -1,0 +1,121 @@
+{
+  "app": {
+    "name": "ديكوشوب موصّل",
+    "tagline": "توصيل · تولوز"
+  },
+  "common": {
+    "loading": "جارٍ التحميل…",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "validate": "تأكيد",
+    "close": "إغلاق",
+    "retry": "إعادة المحاولة",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "yes": "نعم",
+    "no": "لا",
+    "today": "اليوم",
+    "tomorrow": "غدًا",
+    "this_week": "هذا الأسبوع",
+    "language": "اللغة",
+    "logout": "تسجيل الخروج"
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل دخول الموصّل",
+      "subtitle": "ادخل بحساب ديكوشوب الخاص بك",
+      "email": "البريد الإلكتروني",
+      "email_placeholder": "your.email@decoshop-toulouse.fr",
+      "password": "كلمة المرور",
+      "password_placeholder": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "submitting": "جارٍ تسجيل الدخول…",
+      "forgot": "نسيت كلمة المرور؟",
+      "errors": {
+        "invalid_credentials": "بريد إلكتروني أو كلمة مرور خاطئة",
+        "network": "لا يوجد اتصال. تحقق من شبكتك.",
+        "unknown": "حدث خطأ. حاول مرة أخرى.",
+        "not_livreur": "هذا الحساب لا يملك صلاحية الموصّل"
+      }
+    },
+    "pin": {
+      "setup_title": "أنشئ رمز PIN",
+      "setup_subtitle": "اختر رمزًا من 4 إلى 6 أرقام لفتح التطبيق بسرعة",
+      "enter_title": "أدخل رمز PIN",
+      "enter_subtitle": "للدخول إلى التطبيق",
+      "confirm_title": "أكّد رمزك",
+      "confirm_subtitle": "أدخله مرة أخرى",
+      "length_hint": "4 إلى 6 أرقام",
+      "mismatch": "الرمزان غير متطابقين. أعد المحاولة.",
+      "incorrect": "رمز غير صحيح",
+      "use_password": "استخدم كلمة المرور بدلًا من ذلك",
+      "skip": "تخطّي"
+    }
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "calendar": "التقويم",
+    "performance": "الإحصائيات",
+    "profile": "الملف"
+  },
+  "home": {
+    "greeting_morning": "صباح الخير",
+    "greeting_afternoon": "مساء الخير",
+    "greeting_evening": "مساء الخير",
+    "today_kpi": {
+      "title": "اليوم",
+      "delivered": "{{count}} موصّل",
+      "delivered_plural": "{{count}} موصّلة",
+      "in_progress": "{{count}} قيد التنفيذ",
+      "remaining": "{{count}} متبقّ",
+      "remaining_plural": "{{count}} متبقّيات",
+      "signature_rate": "التوقيع: {{rate}} %"
+    },
+    "to_deliver": "للتوصيل",
+    "no_deliveries": "لا توجد توصيلات اليوم."
+  },
+  "bl": {
+    "status": {
+      "cree": "أُنشئ",
+      "assigne": "مُسنَد",
+      "confirme": "مؤكَّد",
+      "release_demandee": "طلب مُرسَل",
+      "bloque": "محظور",
+      "en_livraison": "قيد التوصيل",
+      "en_route": "في الطريق",
+      "livre": "مُسلَّم",
+      "signature_attendue": "بانتظار التوقيع",
+      "signe": "موقَّع",
+      "signature_expiree": "انتهت صلاحية التوقيع",
+      "echec_T1": "فشل (المحاولة الأولى)",
+      "echec_T2": "فشل (المحاولة الثانية)",
+      "abandon": "مُلغى"
+    }
+  },
+  "creneau": {
+    "matin": "صباحًا",
+    "matin_hours": "9-12",
+    "apres_midi": "بعد الظهر",
+    "apres_midi_hours": "14-18",
+    "soir": "مساءً",
+    "soir_hours": "18-20"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "vehicle": "المركبة",
+    "logout": "تسجيل الخروج",
+    "logout_confirm": "هل أنت متأكد من تسجيل الخروج؟"
+  },
+  "errors": {
+    "page_not_found": "الصفحة غير موجودة",
+    "page_not_found_back": "العودة إلى الرئيسية",
+    "offline": "أنت غير متصل. ستُؤجَّل بعض الإجراءات.",
+    "generic": "حدث خطأ."
+  }
+}
