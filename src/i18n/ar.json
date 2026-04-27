@@ -74,7 +74,8 @@
       "signature_rate": "التوقيع: {{rate}} %"
     },
     "to_deliver": "للتوصيل",
-    "no_deliveries": "لا توجد توصيلات اليوم."
+    "no_deliveries": "لا توجد توصيلات اليوم.",
+    "no_bls_for_creneau": "لا توجد توصيلات في هذه الفترة."
   },
   "bl": {
     "status": {
@@ -91,7 +92,23 @@
       "signature_expiree": "انتهت صلاحية التوقيع",
       "echec_T1": "فشل (المحاولة الأولى)",
       "echec_T2": "فشل (المحاولة الثانية)",
-      "abandon": "مُلغى"
+      "abandon": "مُلغى",
+      "retour_planifie": "إرجاع مخطَّط",
+      "retour_en_cours": "إرجاع جارٍ",
+      "retour_collecte": "تم استرجاعه"
+    },
+    "card": {
+      "items_one": "{{count}} عنصر",
+      "items_other": "{{count}} عناصر",
+      "no_address": "العنوان غير مذكور"
+    },
+    "actions": {
+      "details": "عرض التفاصيل",
+      "request_release": "أنا متاح",
+      "release_pending": "تم إرسال الطلب",
+      "release_sent": "تم إرسال الطلب إلى البائع",
+      "release_failed": "فشل الطلب",
+      "open_map": "المسار"
     }
   },
   "creneau": {

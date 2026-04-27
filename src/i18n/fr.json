@@ -74,7 +74,8 @@
       "signature_rate": "Signature : {{rate}} %"
     },
     "to_deliver": "À livrer",
-    "no_deliveries": "Aucune livraison prévue aujourd'hui."
+    "no_deliveries": "Aucune livraison prévue aujourd'hui.",
+    "no_bls_for_creneau": "Aucune livraison sur ce créneau."
   },
   "bl": {
     "status": {
@@ -91,7 +92,23 @@
       "signature_expiree": "Signature expirée",
       "echec_T1": "Échec (1ère tentative)",
       "echec_T2": "Échec (2ème tentative)",
-      "abandon": "Abandonné"
+      "abandon": "Abandonné",
+      "retour_planifie": "Retour planifié",
+      "retour_en_cours": "Retour en cours",
+      "retour_collecte": "Retour collecté"
+    },
+    "card": {
+      "items_one": "{{count}} article",
+      "items_other": "{{count}} articles",
+      "no_address": "Adresse non renseignée"
+    },
+    "actions": {
+      "details": "Voir détails",
+      "request_release": "Je suis dispo",
+      "release_pending": "Demande envoyée",
+      "release_sent": "Demande envoyée au vendeur",
+      "release_failed": "Échec de la demande",
+      "open_map": "Itinéraire"
     }
   },
   "creneau": {
