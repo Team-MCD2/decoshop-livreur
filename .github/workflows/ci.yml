@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# Cancel previous runs on the same branch when a new push lands
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Lint · Typecheck · Build · Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install (frozen lockfile)
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck (no emit)
+        run: npm run typecheck
+
+      - name: Build (production)
+        run: npm run build
+        env:
+          # Stub values used at build time. Real values are injected per
+          # environment at deploy (Vercel / Netlify / Supabase secrets).
+          VITE_SUPABASE_URL: https://stub.supabase.co
+          VITE_SUPABASE_ANON_KEY: stub-anon-key-for-ci
+          VITE_APP_URL: http://localhost:5173
+          VITE_APP_NAME: DecoShop Livreur
+          VITE_DEFAULT_LANGUAGE: fr
+
+      - name: Test (vitest run)
+        run: npm run test:run

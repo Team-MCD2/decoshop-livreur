@@ -165,6 +165,14 @@ Tests Phase 1 :
 | `npm test` | Vitest watch |
 | `npm run test:run` | Vitest one-shot |
 | `npm run test:ui` | Vitest UI |
+| `npm run check` | **Full gate** : lint + typecheck + build + tests (à lancer avant un PR) |
+
+## 🤖 CI
+
+Chaque push et PR sur `main` ou `develop` lance le full gate
+(lint + typecheck + build + tests) sur Node 20 via GitHub Actions
+(`.github/workflows/ci.yml`). La protection de branche sur `main`
+doit exiger ce check avant merge.
 
 ## 📄 Licence
 

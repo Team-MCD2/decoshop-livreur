@@ -15,7 +15,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
-    "typecheck": "tsc -b --noEmit"
+    "typecheck": "tsc -b --noEmit",
+    "check": "npm run lint && npm run typecheck && npm run build && npm run test:run"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
