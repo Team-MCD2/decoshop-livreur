@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapPin, AlertTriangle, Crosshair } from 'lucide-react';
+import { MapPin, AlertTriangle, Crosshair, ExternalLink } from 'lucide-react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Card } from '@/components/ui/Card';
@@ -75,11 +75,24 @@ export function BLMap({ destLat, destLng, driver, heightClass = 'h-72' }: BLMapP
     return () => window.clearTimeout(t);
   }, [i18n.language]);
 
-  // Marker livreur — créé/déplacé à chaque update de position
+  // Marker livreur — créé/déplacé à chaque update de position.
+  // Fit-bounds uniquement à la PREMIÈRE apparition du driver pour ne pas
+  // saccader la caméra à chaque ping GPS (toutes les 8s).
   useEffect(() => {
-    if (!mapRef.current || !driver) return;
+    if (!mapRef.current) return;
 
-    if (!driverMarkerRef.current) {
+    // Driver tracking arrêté (ex: BL n'est plus en_route) → retirer le marker
+    if (!driver) {
+      if (driverMarkerRef.current) {
+        driverMarkerRef.current.remove();
+        driverMarkerRef.current = null;
+      }
+      return;
+    }
+
+    const isFirstAppearance = !driverMarkerRef.current;
+
+    if (isFirstAppearance) {
       const driverEl = document.createElement('div');
       driverEl.className =
         'flex items-center justify-center w-7 h-7 rounded-full bg-navy ring-4 ring-navy/20 shadow-md';
@@ -89,24 +102,42 @@ export function BLMap({ destLat, destLng, driver, heightClass = 'h-72' }: BLMapP
         .setLngLat([driver.lng, driver.lat])
         .addTo(mapRef.current);
     } else {
-      driverMarkerRef.current.setLngLat([driver.lng, driver.lat]);
+      driverMarkerRef.current!.setLngLat([driver.lng, driver.lat]);
     }
 
-    // Si on a destination + driver, fit les 2 dans la viewport
-    if (hasDestCoords) {
-      const bounds = new mapboxgl.LngLatBounds([destLng!, destLat!], [destLng!, destLat!]);
-      bounds.extend([driver.lng, driver.lat]);
+    // Fit destination + driver dans la viewport — SEULEMENT à la 1ère apparition.
+    // Ensuite l'utilisateur garde le contrôle du zoom/pan ; les pings GPS bougent
+    // simplement le marker sans recadrer.
+    if (isFirstAppearance && hasDestCoords) {
+      const bounds = new mapboxgl.LngLatBounds()
+        .extend([destLng!, destLat!])
+        .extend([driver.lng, driver.lat]);
       mapRef.current.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 600 });
     }
   }, [driver, destLat, destLng, hasDestCoords]);
 
-  // Fallback : pas de token Mapbox
+  // Fallback : pas de token Mapbox — dégradation gracieuse vers Google Maps si
+  // les coordonnées du client sont disponibles.
   if (!hasToken) {
+    const gmapsHref = hasDestCoords
+      ? `https://www.google.com/maps/search/?api=1&query=${destLat},${destLng}`
+      : null;
     return (
-      <Card variant="cream" padding="lg" className={`${heightClass} flex flex-col items-center justify-center text-center`}>
-        <AlertTriangle className="w-8 h-8 text-yellow-700 mb-2" />
+      <Card variant="cream" padding="lg" className={`${heightClass} flex flex-col items-center justify-center text-center gap-2`}>
+        <AlertTriangle className="w-8 h-8 text-yellow-700" />
         <p className="text-sm font-bold text-ink">{t('map.missing_token')}</p>
-        <p className="text-xs text-muted mt-1 max-w-sm">{t('map.missing_token_hint')}</p>
+        <p className="text-xs text-muted max-w-sm">{t('map.missing_token_hint')}</p>
+        {gmapsHref && (
+          <a
+            href={gmapsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-navy text-cream text-xs font-bold hover:bg-navy/90 transition-colors"
+          >
+            <ExternalLink className="w-3 h-3" />
+            {t('map.open_in_google_maps', 'Ouvrir dans Google Maps')}
+          </a>
+        )}
       </Card>
     );
   }

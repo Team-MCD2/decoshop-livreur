@@ -11,10 +11,25 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   );
 }
 
-export const supabase = createClient<Database>(
+/**
+ * Singleton client Supabase — schéma par défaut: `livreur`.
+ *
+ * Consolidation 2026-04-30 : depuis le merge avec le projet `decoshop`
+ * (inventaire), TOUTES les tables livreur vivent dans le schéma `livreur.*`
+ * (au lieu de `public.*`). On configure donc `livreur` comme schéma par
+ * défaut pour `from()` et `rpc()`. Pour les rares lectures cross-schema
+ * (ex: `public.articles_public`), utiliser `supabase.schema('public').from(...)`.
+ *
+ * Nécessite que les schémas `livreur` ET `public` soient exposés dans
+ * Supabase Studio → Settings → API → Exposed schemas.
+ */
+export const supabase = createClient<Database, 'livreur'>(
   SUPABASE_URL ?? 'http://localhost:54321',
   SUPABASE_ANON_KEY ?? 'anon-placeholder',
   {
+    db: {
+      schema: 'livreur',
+    },
     auth: {
       persistSession: true,
       autoRefreshToken: true,

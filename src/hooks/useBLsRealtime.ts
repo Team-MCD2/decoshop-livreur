@@ -23,7 +23,10 @@ export function useBLsRealtime(livreurId: string | undefined) {
         'postgres_changes',
         {
           event: '*',
-          schema: 'public',
+          // Consolidation 2026-04-30 : la table vit dans `livreur.*`, pas `public.*`.
+          // Nécessite que la publication realtime de Supabase couvre le schéma livreur
+          // (Studio → Database → Replication → cocher livreur.bons_livraison).
+          schema: 'livreur',
           table: 'bons_livraison',
           filter: `livreur_id=eq.${livreurId}`,
         },

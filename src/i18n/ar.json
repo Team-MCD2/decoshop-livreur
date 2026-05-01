@@ -174,7 +174,8 @@
     "missing_token": "Mapbox غير مُهيأ",
     "missing_token_hint": "حدّد VITE_MAPBOX_TOKEN في .env.local لتفعيل الخريطة.",
     "no_coords": "إحداثيات GPS غير محددة لهذا العميل",
-    "loading": "جارٍ تحميل الخريطة…"
+    "loading": "جارٍ تحميل الخريطة…",
+    "open_in_google_maps": "افتح في Google Maps"
   },
   "signature": {
     "draw_here": "وقّع هنا",

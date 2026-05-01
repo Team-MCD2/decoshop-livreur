@@ -174,7 +174,8 @@
     "missing_token": "Mapbox non configuré",
     "missing_token_hint": "Définis VITE_MAPBOX_TOKEN dans .env.local pour activer la carte.",
     "no_coords": "Coordonnées GPS non renseignées pour ce client",
-    "loading": "Chargement de la carte…"
+    "loading": "Chargement de la carte…",
+    "open_in_google_maps": "Ouvrir dans Google Maps"
   },
   "signature": {
     "draw_here": "Signez ici",

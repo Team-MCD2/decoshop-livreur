@@ -42,10 +42,23 @@ export default function Login() {
       }
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'unknown';
-      if (msg.toLowerCase().includes('invalid')) {
+      const msgLower = msg.toLowerCase();
+      if (msgLower.includes('invalid') || msgLower.includes('invalid_credentials')) {
         setError(t('auth.login.errors.invalid_credentials'));
-      } else if (msg.toLowerCase().includes('network') || msg.toLowerCase().includes('fetch')) {
-        setError(t('auth.login.errors.network'));
+      } else if (
+        msgLower.includes('failed to fetch') ||
+        msgLower.includes('networkerror') ||
+        msgLower.includes('network') ||
+        msgLower.includes('fetch') ||
+        msgLower.includes('err_name_not_resolved')
+      ) {
+        // DNS / network failure — likely Supabase project is paused or URL is wrong
+        setError(
+          t('auth.login.errors.network', {
+            defaultValue:
+              'Impossible de joindre le serveur. Vérifiez votre connexion internet et que le projet Supabase est actif.',
+          }),
+        );
       } else {
         setError(t('auth.login.errors.unknown'));
       }

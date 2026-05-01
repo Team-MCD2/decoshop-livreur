@@ -1,9 +1,18 @@
 /**
  * Types Supabase Database — DecoShop Livreur
  *
+ * Consolidation 2026-04-30 : toutes les tables livreur vivent maintenant dans
+ * le schéma `livreur.*` (au lieu de `public.*`). Le client Supabase est
+ * configuré avec `db.schema: 'livreur'` comme défaut, donc `from('xxx')` et
+ * `rpc('xxx')` résolvent automatiquement vers `livreur.xxx`.
+ *
+ * Le schéma `public` est exposé uniquement pour la vue `articles_public`
+ * (lecture cross-schema des articles inventaire) — utiliser via
+ * `supabase.schema('public').from('articles_public').select(...)`.
+ *
  * Note : Ce fichier sera régénéré via `supabase gen types typescript --project-id <id>`
- * une fois que le repo sera connecté au CLI Supabase. En attendant, types manuels alignés
- * sur le schéma SQL (cf. plan/sql/01_types_and_tables.sql).
+ * une fois le CLI authentifié. En attendant, types manuels alignés
+ * sur le schéma SQL (cf. decoshop-livreur/sql/003_livreur_schema.sql).
  *
  * IMPORTANT — chaque table/view DOIT inclure `Relationships: []` (ou les vraies FK)
  * pour satisfaire la contrainte `GenericTable` de @supabase/postgrest-js, sinon le
@@ -39,7 +48,7 @@ interface Relationship {
 }
 
 export interface Database {
-  public: {
+  livreur: {
     Tables: {
       profiles: {
         Row: ToRow<Profile>;
@@ -180,6 +189,65 @@ export interface Database {
           },
         ];
       };
+      signatures_electroniques: {
+        Row: {
+          id: string;
+          bl_id: string;
+          token: string;
+          statut: 'en_attente' | 'signe' | 'expire';
+          date_emission: string;
+          date_expiration: string;
+          date_signature: string | null;
+          signature_data: string | null;
+          signe_par_parent: boolean;
+          parent_nom: string | null;
+          parent_lien: string | null;
+          user_agent: string | null;
+          retry_count: number;
+          invalidated_at: string | null;
+          invalidated_by: string | null;
+          invalidated_motif: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          bl_id: string;
+          token: string;
+          statut?: 'en_attente' | 'signe' | 'expire';
+          date_emission?: string;
+          date_expiration: string;
+          date_signature?: string | null;
+          signature_data?: string | null;
+          signe_par_parent?: boolean;
+          parent_nom?: string | null;
+          parent_lien?: string | null;
+          user_agent?: string | null;
+          retry_count?: number;
+        };
+        Update: {
+          statut?: 'en_attente' | 'signe' | 'expire';
+          date_signature?: string | null;
+          signature_data?: string | null;
+          signe_par_parent?: boolean;
+          parent_nom?: string | null;
+          parent_lien?: string | null;
+          user_agent?: string | null;
+          retry_count?: number;
+          invalidated_at?: string | null;
+          invalidated_by?: string | null;
+          invalidated_motif?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'signatures_electroniques_bl_id_fkey';
+            columns: ['bl_id'];
+            isOneToOne: false;
+            referencedRelation: 'bons_livraison';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       v_livreur_bl_today: {
@@ -290,6 +358,32 @@ export interface Database {
         };
       };
     };
+  };
+  public: {
+    Tables: Record<string, never>;
+    Views: {
+      articles_public: {
+        Row: {
+          id: string;
+          numero_article: string | null;
+          description: string | null;
+          marque: string | null;
+          categorie: string | null;
+          couleur: string | null;
+          prix_vente: number | null;
+          quantite: number | null;
+          quantite_initiale: number | null;
+          seuil_stock_faible: number | null;
+          photo_url: string | null;
+          code_barres: string | null;
+          taille: string | null;
+          created_at: number | null;
+          updated_at: number | null;
+        };
+        Relationships: [];
+      };
+    };
+    Functions: Record<string, never>;
   };
 }
 

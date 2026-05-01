@@ -54,13 +54,33 @@ export interface SignatureInvalidateResult {
 }
 
 /**
+ * Feature flag : envoi d'email via Edge Function `send-signature-email`.
+ *
+ * Désactivé par défaut depuis la consolidation 2026-04-30 (Edge Function
+ * pas redéployée sur le projet `decoshop`, Resend non configuré).
+ *
+ * Pour réactiver :
+ *   1. Déployer la fonction : `supabase functions deploy send-signature-email`
+ *      sur le projet `dzjebcipoqgjvxxmlcry`.
+ *   2. Configurer le secret Resend : `supabase secrets set RESEND_API_KEY=re_...`
+ *   3. Mettre `VITE_ENABLE_SIGNATURE_EMAIL=true` dans .env.local et redémarrer Vite.
+ *
+ * Tant que désactivé, le token est généré normalement par le RPC : le livreur
+ * peut copier-coller le lien `/sign/:token` et l'envoyer manuellement (SMS,
+ * WhatsApp, etc.).
+ */
+const ENABLE_SIGNATURE_EMAIL =
+  import.meta.env.VITE_ENABLE_SIGNATURE_EMAIL === 'true';
+
+/**
  * Demande de signature électronique pour un BL livré.
  *
  * Étapes :
  *   1. RPC `request_signature` → génère token + passe BL en `signature_attendue`
- *   2. Edge Function `send-signature-email` (best-effort) → envoie l'email
- *      via Resend. Si l'envoi échoue, on retourne quand même le token : le
- *      livreur peut partager le lien manuellement.
+ *   2. Edge Function `send-signature-email` (best-effort, si flag activé) →
+ *      envoie l'email via Resend. Si l'envoi échoue OU si la feature est
+ *      désactivée, on retourne quand même le token : le livreur peut
+ *      partager le lien manuellement.
  *
  * Paramètres :
  *   - blId : UUID du BL
@@ -93,16 +113,18 @@ export function useRequestSignature() {
         'email_status' | 'email_error' | 'email_message_id'
       >;
 
-      // 2) Edge Function : envoi best-effort
-      if (!sendEmail) {
+      // 2) Court-circuit si la feature email est désactivée globalement OU
+      //    si l'appelant a explicitement passé `sendEmail: false`.
+      if (!ENABLE_SIGNATURE_EMAIL || !sendEmail) {
         return {
           ...rpc,
-          email_status: 'skipped',
+          email_status: ENABLE_SIGNATURE_EMAIL ? 'skipped' : 'not_configured',
           email_error: null,
           email_message_id: null,
         };
       }
 
+      // 3) Edge Function : envoi best-effort
       const { data: fnData, error: fnErr } = await supabase.functions.invoke<{
         success: boolean;
         recipient?: string;
