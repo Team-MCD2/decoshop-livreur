@@ -103,8 +103,6 @@ VITE_SUPABASE_URL=https://dzjebcipoqgjvxxmlcry.supabase.co
 VITE_SUPABASE_ANON_KEY=<from Studio → Settings → API → anon (public)>
 ```
 
-The legacy `pvpcpsesuquqpkezhear` value is preserved as a comment in that file but is **deprecated** since the consolidation.
-
 ### 6. Smoke tests
 
 Paste in SQL Editor (some need to be run as authenticated — see notes):
