@@ -1,8 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database.types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// `.trim()` — defensive against Vercel/Netlify dashboards that sometimes append
+// a trailing newline to pasted env values. Without this, a trailing `\n` in
+// VITE_SUPABASE_ANON_KEY gets URL-encoded as `%0A` inside the realtime
+// websocket query string and breaks JWT validation (CHANNEL_ERROR).
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.trim();
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   // eslint-disable-next-line no-console

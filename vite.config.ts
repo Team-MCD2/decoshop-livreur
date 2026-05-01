@@ -55,6 +55,13 @@ export default defineConfig(({ mode }) => ({
         // Mapbox (~1,8 MB) exclu du précache — chargé à la demande puis caché en runtime.
         // Évite +488 KiB gzip à chaque install/update.
         globIgnores: ['**/mapbox-*.js', '**/mapbox-gl*.css'],
+        // Purge les précache entries périmées quand un nouveau SW s'installe
+        // (sinon une ancienne JS bundle avec ex. la vieille URL Supabase reste servie).
+        cleanupOutdatedCaches: true,
+        // Nouveau SW prend le contrôle immédiat, sans attendre un second reload.
+        // Critique pour qu'un rollback/hotfix d'URL backend soit diffusé rapidement.
+        skipWaiting: true,
+        clientsClaim: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,

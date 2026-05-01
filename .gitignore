@@ -52,3 +52,4 @@ dev-dist/
 test-results/
 playwright-report/
 playwright/.cache/
+error.txt
