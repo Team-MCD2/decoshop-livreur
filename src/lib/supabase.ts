@@ -8,10 +8,20 @@ import type { Database } from '@/types/database.types';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.trim();
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  // eslint-disable-next-line no-console
-  console.warn(
-    '[supabase] VITE_SUPABASE_URL et/ou VITE_SUPABASE_ANON_KEY non défini — vérifie ton .env.local',
+// Fail loud at module load if env is missing / malformed — beats the cryptic
+// "Invalid supabaseUrl" thrown later by the SDK constructor, and prevents
+// silent fallback to `http://localhost:54321` in a production build.
+if (!SUPABASE_URL || !/^https?:\/\//.test(SUPABASE_URL)) {
+  throw new Error(
+    `[supabase] VITE_SUPABASE_URL manquant ou malformé (reçu: "${SUPABASE_URL ?? '<undefined>'}"). ` +
+      'Vérifie .env.local en local, ou Settings → Environment Variables sur Vercel. ' +
+      'Format attendu : https://<ref>.supabase.co',
+  );
+}
+if (!SUPABASE_ANON_KEY) {
+  throw new Error(
+    '[supabase] VITE_SUPABASE_ANON_KEY manquant. ' +
+      'Vérifie .env.local en local, ou Settings → Environment Variables sur Vercel.',
   );
 }
 
@@ -28,8 +38,8 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
  * Supabase Studio → Settings → API → Exposed schemas.
  */
 export const supabase = createClient<Database, 'livreur'>(
-  SUPABASE_URL ?? 'http://localhost:54321',
-  SUPABASE_ANON_KEY ?? 'anon-placeholder',
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
   {
     db: {
       schema: 'livreur',
