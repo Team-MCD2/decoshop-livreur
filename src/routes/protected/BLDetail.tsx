@@ -340,7 +340,13 @@ export default function BLDetail() {
           </Button>
         </Card>
       ) : (
-        <WorkflowActions blId={bl.id} status={bl.statut} />
+        <WorkflowActions
+          blId={bl.id}
+          numeroBl={bl.numero_bl}
+          status={bl.statut}
+          gpsLat={isEnRoute ? (gps.position?.lat ?? null) : null}
+          gpsLng={isEnRoute ? (gps.position?.lng ?? null) : null}
+        />
       )}
 
       <SignatureModal

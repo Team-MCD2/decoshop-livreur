@@ -21,7 +21,8 @@
     "tomorrow": "Demain",
     "this_week": "Cette semaine",
     "language": "Langue",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "optional": "optionnel"
   },
   "auth": {
     "login": {
@@ -247,6 +248,68 @@
       "generic": "Erreur lors de l'envoi. Réessaie."
     }
   },
+  "workflow": {
+    "errors": {
+      "not_yours": "Ce BL n'est pas assigné à ton compte.",
+      "invalid_transition": "Transition de statut non autorisée à cette étape.",
+      "no_profile": "Ton profil livreur n'est pas encore activé par l'admin.",
+      "not_found": "BL introuvable. Il a peut-être été supprimé.",
+      "unauth": "Session expirée — reconnecte-toi.",
+      "generic": "Impossible de mettre à jour le statut. Réessaie."
+    }
+  },
+  "failure": {
+    "modal_title": "Signaler un échec",
+    "intro": "Choisis le motif. Les motifs hors-faute-client sont sans frais.",
+    "reason_label": "Motif de l'échec",
+    "reasons": {
+      "client_absent": "Client absent",
+      "client_refuse": "Client refuse la livraison",
+      "adresse_introuvable": "Adresse introuvable",
+      "articles_endommages": "Articles endommagés",
+      "colis_perdu": "Colis perdu",
+      "meteo": "Météo défavorable",
+      "panne_vehicule": "Panne de véhicule",
+      "autre": "Autre motif"
+    },
+    "reasons_hint": {
+      "client_absent": "Personne sur place après tentative de contact.",
+      "client_refuse": "Le client refuse la livraison sans motif valable.",
+      "adresse_introuvable": "Adresse incorrecte ou inaccessible.",
+      "articles_endommages": "Articles abîmés — retour atelier.",
+      "colis_perdu": "Colis introuvable au départ ou perdu en route.",
+      "meteo": "Conditions météo rendant la livraison dangereuse.",
+      "panne_vehicule": "Véhicule en panne — livraison reportée.",
+      "autre": "Préciser dans le commentaire."
+    },
+    "no_fee": "sans frais",
+    "no_fee_explain": "Cas exonéré — pas de frais de re-livraison facturés au client.",
+    "comment_label": "Commentaire",
+    "comment_placeholder": "Précise le contexte (interphone, voisin, étage…)",
+    "photo_label": "Photo du litige",
+    "photo_pick": "Prendre une photo",
+    "photo_alt": "Photo du litige",
+    "gps_label": "Position GPS",
+    "gps_none": "Aucune position capturée",
+    "gps_capture": "Capturer",
+    "gps_refresh": "Rafraîchir",
+    "submit": "Signaler l'échec",
+    "submitting": "Enregistrement…",
+    "success_title": "Échec enregistré",
+    "success_body": "Tentative {{attempt}}/3 — statut « {{status}} ». Le vendeur a été notifié.",
+    "success_no_fee": "Aucun frais de re-livraison ne sera facturé (cas exonéré).",
+    "success_abandon_hint": "3 tentatives atteintes — le BL passe en abandon. Contacte ton admin pour la suite (retour ou nouvelle planification).",
+    "errors": {
+      "not_yours": "Ce BL n'est pas assigné à ton compte.",
+      "invalid_status": "Impossible de signaler un échec depuis ce statut.",
+      "max_reached": "3 tentatives déjà enregistrées — passe le BL en retour ou abandon.",
+      "no_profile": "Profil livreur non activé par l'admin.",
+      "not_found": "BL introuvable.",
+      "unauth": "Session expirée — reconnecte-toi.",
+      "photo_too_large": "Photo trop lourde (max 10 Mo).",
+      "generic": "Erreur lors du signalement. Réessaie."
+    }
+  },
   "creneau": {
     "matin": "Matin",
     "matin_hours": "9h-12h",
@@ -264,10 +327,74 @@
     "logout": "Se déconnecter",
     "logout_confirm": "Tu es sûr de vouloir te déconnecter ?"
   },
+  "performance": {
+    "title": "Performance",
+    "subtitle": "Statistiques et score qualité",
+    "today": {
+      "title": "Aujourd'hui",
+      "subtitle": "Tes BL du jour"
+    },
+    "period": {
+      "title": "Sur la période",
+      "preset_7d": "7 jours",
+      "preset_30d": "30 jours",
+      "preset_90d": "90 jours",
+      "days_active_one": "{{count}} jour actif",
+      "days_active_other": "{{count}} jours actifs",
+      "range": "Du {{from}} au {{to}}"
+    },
+    "metric": {
+      "total": "Total",
+      "delivered": "Livrés",
+      "signed": "Signés",
+      "in_progress": "En cours",
+      "remaining": "Restants",
+      "failed": "Échecs",
+      "abandoned": "Abandons",
+      "on_time": "À l'heure",
+      "signature_rate": "Taux signature",
+      "success_rate": "Taux succès",
+      "failure_rate": "Taux échec",
+      "on_time_rate": "Taux ponctualité",
+      "avg_attempts": "Tentatives / échec"
+    },
+    "empty": {
+      "title": "Aucune donnée",
+      "body": "Tes statistiques apparaîtront ici dès tes premières livraisons."
+    },
+    "loading": "Chargement des statistiques…",
+    "errors": {
+      "generic": "Impossible de charger les statistiques.",
+      "unauth": "Tu dois te reconnecter pour voir tes statistiques.",
+      "forbidden": "Tu n'as pas accès aux statistiques d'un autre livreur.",
+      "invalid_period": "La date de début doit être avant la date de fin.",
+      "period_too_long": "La période ne peut pas dépasser 366 jours.",
+      "no_profile": "Profil livreur introuvable."
+    }
+  },
+  "offline": {
+    "banner_title": "Mode hors-ligne",
+    "banner_body": "Tes actions seront envoyées à la reconnexion.",
+    "queued_one": "{{count}} action en attente",
+    "queued_other": "{{count}} actions en attente",
+    "syncing": "Synchronisation en cours…",
+    "synced_one": "{{count}} action synchronisée",
+    "synced_other": "{{count}} actions synchronisées",
+    "sync_failed_one": "{{count}} action n'a pas pu être envoyée",
+    "sync_failed_other": "{{count}} actions n'ont pas pu être envoyées",
+    "queued_action_hint": "Sera envoyée à la reconnexion."
+  },
   "errors": {
     "page_not_found": "Page introuvable",
     "page_not_found_back": "Retourner à l'accueil",
     "offline": "Tu es hors ligne. Certaines actions seront différées.",
-    "generic": "Une erreur est survenue."
+    "generic": "Une erreur est survenue.",
+    "boundary": {
+      "title": "Quelque chose s'est mal passé",
+      "body": "Une erreur inattendue a interrompu l'écran. Tes données sont sauvegardées côté serveur.",
+      "dev_details": "Détails techniques (dev only)",
+      "home": "Accueil",
+      "reload": "Recharger"
+    }
   }
 }

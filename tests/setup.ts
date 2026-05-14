@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom/vitest';
+// IndexedDB polyfill for the offline mutation queue tests (Phase 6).
+// `fake-indexeddb/auto` swaps in a pure-JS IndexedDB implementation on import,
+// no further wiring needed.
+import 'fake-indexeddb/auto';
 import { afterEach, beforeAll, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 

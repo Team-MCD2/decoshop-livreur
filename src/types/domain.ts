@@ -122,6 +122,68 @@ export interface Commande {
   updated_at: string;
 }
 
+/**
+ * Événement dans `bons_livraison.attempt_log` (JSONB[]) — schéma écrit
+ * par la RPC `livreur.record_failed_attempt`. Sert de log rapide pour l'UI
+ * sans devoir join `bl_attempt_log`.
+ */
+export interface AttemptEvent {
+  attempt_number: number;
+  motif: AttemptFailureReason;
+  commentaire: string | null;
+  photo_litige_url: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  force_majeure: boolean;
+  recorded_at: string;
+  recorded_by: string;
+  previous_status: BLStatus;
+  new_status: BLStatus;
+}
+
+/**
+ * Événement dans `bons_livraison.assignment_log` (JSONB[]) — append-only,
+ * écrit lors de chaque (ré)assignation par un admin/vendeur.
+ *
+ * Note 2026-05-13 : la migration 003 prévoit la colonne mais aucun
+ * pipeline d'écriture n'existe encore côté DB. Cette interface définit
+ * le contrat attendu pour quand on l'implémentera (Phase 5+).
+ */
+export interface AssignmentEvent {
+  /** UUID du livreur précédent (null sur la 1ère assignation). */
+  from_livreur_id: string | null;
+  /** UUID du livreur cible. */
+  to_livreur_id: string;
+  /** UUID de l'admin/vendeur qui assigne. */
+  assigned_by: string;
+  assigned_at: string;
+  /** Motif libre (e.g. "absence livreur initial"). */
+  motif: string | null;
+  /** Source du déclenchement : 'auto_assign' | 'admin_manual' | 'release_validation'. */
+  source: 'auto_assign' | 'admin_manual' | 'release_validation' | string;
+}
+
+/**
+ * Ligne de `livreur.bl_status_history` — audit trail append-only,
+ * alimenté par le trigger `trg_log_bl_status_change` + enrichi par les RPCs.
+ */
+export interface StatusHistoryEvent {
+  id: string;
+  bl_id: string;
+  ancien_statut: BLStatus | null;
+  nouveau_statut: BLStatus;
+  triggered_by: string | null;
+  /**
+   * 'creation' : insert initial
+   * 'user'     : update direct par PostgREST (avant migration 010)
+   * 'system'   : update via trigger
+   * 'rpc:<name>' : update via une RPC (transition_bl_status, record_failed_attempt, ...)
+   */
+  trigger_source: string | null;
+  metadata: Record<string, unknown>;
+  changed_at: string;
+}
+
 export interface BL {
   id: string;
   numero_bl: string;
@@ -138,8 +200,8 @@ export interface BL {
   montant_frais_relivraison: number;
   nb_tentatives: number;
   admin_waiver: boolean;
-  attempt_log: unknown[];
-  assignment_log: unknown[];
+  attempt_log: AttemptEvent[];
+  assignment_log: AssignmentEvent[];
   release_requested_at: string | null;
   release_validated_at: string | null;
   release_validated_by: string | null;
